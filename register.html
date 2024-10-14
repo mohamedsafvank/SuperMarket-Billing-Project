@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form with Tailwind Grid</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+
+    <style>
+        .clip-path-custom {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 20% 100%);
+        }
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #38a169;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s, visibility 0.5s, transform 0.5s;
+            transform: translateY(-30px);
+        }
+
+        .show-toast {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .error-toast {
+            background-color: #e53e3e;
+        }
+        
+        .password-container {
+            position: relative;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-10 mt-10">
+    <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-xl" style="height: 500px;">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="flex-grow p-16 mt-10 flex justify-center flex-wrap">
+                <form id="userDetails" autocomplete="off">
+                    <label for="fname" class="block text-sm font-medium text-gray-700">First Name</label>
+                    <input type="text" id="fname" name="fname" class="mt-1 p-2 border w-64 rounded-md border-gray-300" autocomplete="off">
+                    
+                    <label for="lname" class="block text-sm font-medium text-gray-700">Last Name</label>
+                    <input type="text" id="lname" name="lname" class="mt-1 p-2 border w-64 rounded-md border-gray-300" autocomplete="off">
+                    
+                    <label for="uname" class="block text-sm font-medium text-gray-700">User Name</label>
+                    <input type="text" id="uname" name="uname" class="mt-1 p-2 border w-64 rounded-md border-gray-300" autocomplete="off">
+                    
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" class="mt-1 p-2 border w-64 rounded-md border-gray-300" autocomplete="new-password">
+                        <span class="toggle-password" onclick="togglePassword()">
+                            <i id="eye-icon" class="fa-solid fa-eye-slash"></i>
+                        </span>
+                    </div>
+                    
+                    <button type="submit" class="px-6 py-3 bg-green-500 text-white rounded-xl w-40 mt-5 hover:bg-gray-500 hover:text-white mr-10" id="register">Register</button>
+                </form>
+            </div>
+
+            <div class="w-full bg-green-500 clip-path-custom mr-6 flex flex-col justify-center items-center text-white" style="height: 500px;">
+                <h1 class="text-4xl font-bold text-center mr-10">HI WELCOME</h1>
+                <p class="mt-4 text-center mr-10">If you already have an account, please Login.</p>
+                <a href="./login.html" class="mt-6">
+                    <button class="px-4 py-2 bg-white text-green-500 rounded-xl hover:bg-gray-500 hover:text-white w-32 mr-10">Login</button>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id="toast-container"></div>
+
+    <script>
+        const uDetails = document.getElementById('userDetails');
+
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        function toast(message, isError = false) {
+            const toast = document.createElement('div');
+            toast.classList.add('toast');
+            if (isError) {
+                toast.classList.add('error-toast');
+            }
+            toast.textContent = message;
+
+            const toastContainer = document.getElementById('toast-container');
+            toastContainer.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('show-toast');
+            },500);
+
+            setTimeout(() => {
+                toast.classList.remove('show-toast');
+                setTimeout(() => {
+                    toast.remove();
+                },500); 
+            }, 2000); 
+        }
+
+        uDetails.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const uName = document.getElementById('uname').value;
+            const password = document.getElementById('password').value;
+
+            if (uName && password) {
+                const user = { uName, password };
+                users.push(user);
+                localStorage.setItem('users', JSON.stringify(users));
+                toast('User registered successfully!');
+                uDetails.reset();
+            } else {
+                toast('Please fill out all fields.', true);
+            }
+        });
+
+        function togglePassword() {
+            const passwordField = document.getElementById('password');
+            const eyeIcon = document.getElementById('eye-icon');
+
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            } else {
+                passwordField.type = 'password';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            }
+        }
+    </script>
+</body>
+</html>

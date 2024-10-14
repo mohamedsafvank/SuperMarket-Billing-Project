@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supermarket Stock Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+ 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+
+  <!-- Heading Section -->
+  <div class="container mx-auto mt-16">
+    <h1 class="text-3xl font-bold text-center text-gray-800">Stock Management</h1>
+  </div>
+
+  <!-- Add Item Button Section -->
+  <div class="container mx-auto mt-14 text-center">
+    <button id="addItemButton" class="bg-green-600 text-white px-6 py-3 rounded-full text-lg hover:bg-green-700 inline-flex items-center" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+      </svg>
+      Add New Item
+    </button>
+  </div>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content bg-gray-100 rounded-lg shadow-lg">
+        <div class="modal-header justify-center bg-green-500 text-white">
+          <h1 class="modal-title text-xl font-semibold mx-auto" id="exampleModalLabel">Add New Product</h1>
+          <button type="button" class="btn-close absolute right-4 text-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-6">
+          <form id="product-form">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label for="product-id" class="block text-base font-medium text-gray-700 mb-1">Product ID</label>
+                <input type="text" id="product-id" class="block w-full h-10 px-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Enter Product ID"  required>
+              </div>
+              <div>
+                <label for="product-name" class="block text-base font-medium text-gray-700 mb-1">Product Name</label>
+                <input type="text" id="product-name" class="block w-full h-10 px-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Enter Product Name" required>
+              </div>
+              <div>
+                <label for="category" class="block text-base font-medium text-gray-700 mb-1">Category</label>
+                <select id="category" class="block w-full h-10 px-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                  <option>Vegetables</option>
+                  <option>Fruits</option>
+                  <option>Dairy</option>
+                  <option>Meat</option>
+                  <option>Others</option>
+                </select>
+              </div>
+              <div>
+                <label for="quantity" class="block text-base font-medium text-gray-700 mb-1">Quantity</label>
+                <input type="number" id="quantity" class="block w-full h-10 px-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Enter Quantity" required>
+              </div>
+              <div>
+                <label for="price" class="block text-base font-medium text-gray-700 mb-1">UnitPrice</label>
+                <input type="text" id="price" class="block w-full h-10 px-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Enter Price" required>
+              </div>
+              <div>
+                <label for="date" class="block text-base font-medium text-gray-700 mb-1">Date Added</label>
+                <input type="date" id="date" class="block w-full h-10 px-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+              </div>
+              <div class="col-span-2">
+                <label for="description" class="block text-base font-medium text-gray-700 mb-1">Description</label>
+                <textarea id="description" class="block w-full h-20 px-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Enter Description"></textarea>
+              </div>
+            </div>
+        </div>
+        <div class="modal-footer flex justify-center mt-0 rounded-b-lg">
+          <button type="button" id="addProductButton" class="bg-green-500 text-white px-4 py-2 rounded-lg mx-auto" data-bs-dismiss="modal">Add Product</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </form>
+
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content  ">
+        <div class="modal-header">
+          <h5 class="modal-title  mx-auto " id="deleteModalLabel">Delete Confirmation</h5>
+          </div>
+        <div class="modal-body mx-auto text-black-200">
+          Are you sure you want to delete this item?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger   mx-auto" id="deleteConfirmButton">Delete</button>
+        
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  
+  <!-- Stock Table -->
+  <div class="container mx-auto mt-12">
+    <div class="overflow-x-auto shadow-md sm:rounded-lg">
+      <table id="stock-table" class="w-full text-sm text-left text-gray-500 bg-white">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-200">
+          <tr>
+            <th scope="col" class="px-6 py-3">Product ID</th>
+            <th scope="col" class="px-6 py-3">Item Name</th>
+            <th scope="col" class="px-6 py-3">Category</th>
+            <th scope="col" class="px-6 py-3">Stock Quantity</th>
+            <th scope="col" class="px-6 py-3">Unit Price</th>
+            <th scope="col" class="px-6 py-3">Date</th>
+            <th scope="col" class="px-6 py-3">Description</th>
+            <th scope="col" class="px-6 py-3">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+            
+          <!-- Rows will be added here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- Billing section  -->
+
+  <!-- Modal Trigger -->
+  <div class="container mx-auto mt-14 text-center ">
+    <button id="sellButton" class="bg-green-600 text-white px-6 py-3 rounded-full text-lg hover:bg-green-700  inline-flex  items-center" data-bs-toggle="modal" data-bs-target="#sellModal">
+        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg> Sell Item
+       
+    </button>
+  </div>
+  
+  
+  <!-- Modal -->
+  <div class="modal fade" id="sellModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content bg-gray-100 rounded-lg shadow-lg">
+        <div class="modal-header justify-center bg-green-500 text-white">
+            <h1 class="modal-title text-xl font-semibold mx-auto" id="exampleModalLabel">Sell New Product</h1>
+          <button type="button" class="btn-close absolute right-4 text-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-6">
+          <form id="sellproduct-form">
+            <div class="grid grid-cols-2 gap-4">
+             <div>
+              <label for="sellproduct-id" class="block text-base font-medium text-gray-700 mb-1">Product ID</label>
+              <input type="text" class="block w-full h-10 px-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" id="sellproduct-id" placeholder="Enter Product ID">
+             </div>
+            
+            <div >
+              <label for="sellquantity" class="block text-base font-medium text-gray-700 mb-1">Quantity</label>
+              <input type="number" class="block w-full h-10 px-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" id="sellquantity" placeholder="Enter Quantity">
+            </div>
+            
+          
+        </div>
+        <div class="modal-footer flex justify-center p-4 rounded-b-lg">
+            <button type="submit" id="addProductButton" class="bg-green-500 text-white px-4 py-2 rounded-lg mx-auto" data-bs-dismiss="modal">Add Product</button>
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+
+
+
+   <!-- Stock Table -->
+   <div class="container mx-auto mt-12">
+    <div class="overflow-x-auto shadow-md sm:rounded-lg">
+      <table id="stock-table" class="w-full text-sm text-left text-gray-500 bg-white">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-200">
+          <tr>
+            <th scope="col" class="px-6 py-3">Product ID</th>
+            <th scope="col" class="px-6 py-3">Item Name</th>
+            <th scope="col" class="px-6 py-3">Category</th>
+            <th scope="col" class="px-6 py-3">Stock Quantity</th>
+            <th scope="col" class="px-6 py-3">Price</th>
+            <th scope="col" class="px-6 py-3">Actions</th>
+           
+          </tr>
+        </thead>
+        <tbody id="selltable-body">
+            
+          <!-- Rows will be added here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="modal fade" id="removeModal" tabindex="-1" aria-labelledby="removeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content  ">
+        <div class="modal-header">
+          <h5 class="modal-title  mx-auto " id="removeModalLabel">Remove Confirmation</h5>
+          </div>
+        <div class="modal-body mx-auto text-black-200">
+          Are you sure you want to Remove this item?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger   mx-auto" id="removeConfirmButton">Delete</button>
+        
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <script>
+
+
+    
+
+
+     // Store the current index to a variable for the delete action
+    let deleteIndex = -1;
+    let updateIndex = -1;
+    
+
+    function displayProducts() {
+      const tableDisplay = document.querySelector('#table-body');
+      const localProducts = JSON.parse(localStorage.getItem('products')) || [];
+      tableDisplay.innerHTML = '';
+
+  localProducts.forEach((product, index) => {
+    const row = `
+      <tr>
+        <td class="px-4 py-2 border-l-2 border-l-green-500 text-black">${product.productId}</td>
+        <td class="px-4 py-2 border-l-2 border-l-green-500 text-black">${product.productName}</td>
+        <td class="px-4 py-2 border-l-2 border-l-green-500 text-black">${product.category}</td>
+        <td class="px-4 py-2 border-l-2 border-l-green-500 text-black">${product.quantity}</td>
+        <td class="px-4 py-2 border-l-2 border-l-green-500 text-black">${product.price}</td>
+        <td class="px-4 py-2 border-l-2 border-l-green-500 text-black">${product.date}</td>
+        <td class="px-4 py-2 border-l-2 border-l-green-500 text-black">${product.description}</td>
+        <td class="px-6 py-4 flex space-x-4">
+          <button class="text-blue-600 hover:text-blue-800 " onclick="setUpdate(${index})">
+            <!-- Update Icon -->
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4H4a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3l-9 9-4 1 1-4 9-9z"></path>
+            </svg>
+          </button>
+         <button type="button" class="text-red-600 hover:text-red-800" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setDeleteIndex(${index})">
+            <!-- Delete Icon -->
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+
+        </td>
+      </tr>
+    `;
+    tableDisplay.innerHTML += row;
+  });
+}
+// document.getElementById('removeButton').addEventListener('click',setRemoveIndex);
+
+
+function setDeleteIndex(index) {
+  deleteIndex = index;
+}
+
+
+
+function setUpdate(index) {
+  const localProducts = JSON.parse(localStorage.getItem('products')) || [];
+  const product = localProducts[index];
+  
+  // Populate form fields with existing product data
+  document.getElementById('product-id').value = product.productId;
+  document.getElementById('product-name').value = product.productName;
+  document.getElementById('category').value = product.category;
+  document.getElementById('quantity').value = product.quantity;
+  document.getElementById('price').value = product.price;
+  document.getElementById('date').value = product.date;
+  document.getElementById('description').value = product.description;
+
+  updateIndex = index;
+
+  document.getElementById('addProductButton').innerText = "Update Product";
+
+  const productModal = new bootstrap.Modal(document.getElementById('exampleModal'), {});
+  productModal.show();
+}
+
+
+
+document.getElementById('addProductButton').addEventListener('click', function() {
+  const productId = document.getElementById('product-id').value;
+  const productName = document.getElementById('product-name').value;
+  const category = document.getElementById('category').value;
+  const quantity = document.getElementById('quantity').value;
+  const price = document.getElementById('price').value;
+  const date = document.getElementById('date').value;
+  const description = document.getElementById('description').value;
+
+  const product = {
+    productId,
+    productName,
+    category,
+    quantity,
+    price,
+    date,
+    description
+  };
+
+  let products = JSON.parse(localStorage.getItem('products')) || [];
+
+  if (updateIndex === -1) {
+    products.push(product);
+  } else {
+    products[updateIndex] = product;
+    updateIndex = -1; 
+    document.getElementById('addProductButton').innerText = "Add Product";
+  }
+
+  localStorage.setItem('products', JSON.stringify(products));
+  document.getElementById('product-form').reset();
+  displayProducts();
+});
+
+
+
+
+
+function deleteRow() {
+  let storedData = localStorage.getItem('products');
+  let dataArray = storedData ? JSON.parse(storedData) : [];
+  
+  if (deleteIndex >= 0 && deleteIndex < dataArray.length) {
+    dataArray.splice(deleteIndex, 1);
+  } else {
+    console.error('Index out of bounds');
+  }
+  
+  localStorage.setItem('products', JSON.stringify(dataArray));
+  displayProducts(); // Refresh the display
+}
+
+
+
+// Attach the delete function to the delete button in the modal
+document.getElementById('deleteConfirmButton').addEventListener('click', function() {
+  deleteRow();
+  location.reload();
+
+});
+
+
+let soldList = JSON.parse(localStorage.getItem('soldList')) || [];
+
+
+// Function to render soldList data into the table
+function renderSoldList() {
+    const tableBody = document.getElementById('selltable-body');
+    tableBody.innerHTML = ''; // Clear any previous table rows
+
+    soldList.forEach((soldItem, index)  => {
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td class="px-6 py-3   text-black">${soldItem.productId}</td>
+            <td class="px-6 py-3   text-black">${soldItem.productName}</td>
+            <td class="px-6 py-3   text-black">${soldItem.category}</td>
+            <td class="px-6 py-3   text-black">${soldItem.quantitySold}</td>
+            <td class="px-6 py-3   text-black">${soldItem.totalPrice}</td>
+            <td class="px-6 py-3   ">
+                      <button  id = "removeButton" type="button" class="text-red-600 hover:text-red-800" data-bs-toggle="modal" data-bs-target="#removeModal"  onclick="setRemoveIndex(${index})" >
+                  <!-- Delete Icon -->
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                    </button>
+              
+            </td>
+            
+        `;
+        tableBody.appendChild(newRow);
+        
+    });
+   
+}
+
+let removeIndex = -1; // This will store the index of the row to be deleted
+
+function setRemoveIndex(index) {
+  removeIndex = index; // Set the index of the item to be removed
+}
+
+function removeRow() {
+  if (removeIndex >= 0 && removeIndex < soldList.length) {
+    // Get the sold item details before removing
+    const soldItem = soldList[removeIndex];
+    
+    // Find the corresponding item in the items table using productId
+    const items = JSON.parse(localStorage.getItem('products')) || [];
+    const itemIndex = items.findIndex(item => item.productId === soldItem.productId);
+    
+    if (itemIndex !== -1) {
+      // Update the quantity in the items table
+      items[itemIndex].quantity = parseInt(items[itemIndex].quantity) + parseInt(soldItem.quantitySold); // Fixing the key to 'quantitySold'
+
+      // Update the items table in localStorage
+      localStorage.setItem('products', JSON.stringify(items));
+    }
+
+    // Remove the item from soldList
+    soldList.splice(removeIndex, 1);
+
+    // Update the soldList in localStorage
+    localStorage.setItem('soldList', JSON.stringify(soldList));
+
+    // Re-render the table to reflect the changes
+    renderSoldList();
+
+    // Reset the removeIndex
+    removeIndex = -1;
+  } else {
+    console.error('Index out of bounds');
+  }
+}
+
+document.getElementById('removeConfirmButton').addEventListener('click', function() {
+  removeRow(); // Remove the row when the delete button is clicked
+  location.reload(); // Reload to reflect changes visually
+});
+
+// Call this to render the sold list initially
+renderSoldList();
+
+
+document.getElementById('sellproduct-form').addEventListener('submit', function (e) {
+    e.preventDefault(); // Prevent the form from submitting and refreshing the page
+
+    // Get the values from the form inputs
+    const sellProductId = document.getElementById('sellproduct-id').value;
+    const sellQuantity = parseInt(document.getElementById('sellquantity').value);
+    
+
+    // Get products from localStorage
+    const products = JSON.parse(localStorage.getItem('products'));
+
+    // Find the product with the matching productId
+    const product = products.find(p => p.productId === sellProductId);
+
+    if (product) {
+        // Update product quantity (reduce stock)
+        const updatedQuantity = product.quantity - sellQuantity;
+
+        // Calculate the total price for the sold quantity (for display)
+        const totalPrice = product.price * sellQuantity;
+
+        // Add the sold product details to soldList
+        const soldItem = {
+            productId: product.productId,
+            productName: product.productName,
+            category: product.category,
+            quantitySold: sellQuantity,
+            totalPrice: totalPrice
+        };
+        soldList.push(soldItem);
+
+        // Update the soldList in localStorage
+        localStorage.setItem('soldList', JSON.stringify(soldList));
+
+        // Re-render the table to show the new sold item
+        renderSoldList();
+        location.reload()
+
+        // Update the product in localStorage (only update the quantity, not the price)
+        product.quantity = updatedQuantity;
+        localStorage.setItem('products', JSON.stringify(products));
+    } else {
+        alert('Product not found!');
+    }
+
+    // Clear the form
+    document.getElementById('sellproduct-form').reset();
+
+    // Close the modal using Bootstrap 5 JavaScript API
+    var modalElement = document.getElementById('sellModal');
+    var modal = bootstrap.Modal.getInstance(modalElement);
+    modal.hide();
+});
+
+// Call this when the window loads
+window.onload = displayProducts;
+
+
+  </script>
+  <!-- Bootstrap CSS and JS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+

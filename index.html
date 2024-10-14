@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
+    
+    <style>
+        .banner {
+            background: url('./images/6216452.jpg') no-repeat center center;
+            background-size: cover;
+            height: 500px;
+            margin-top: 20px;
+        }
+        .settings-icon {
+            display: inline-block;
+            animation: rotate 2s infinite linear;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100"  id="body">
+
+    <!-- Navbar -->
+    <nav class="bg-green-500 p-4" id="navbar">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-white text-2xl font-bold">My Market</a>
+            <ul class="hidden md:flex space-x-4">
+                <li><a href="#" class="text-white hover:underline">Home</a></li>
+                <li><a href="#" class="text-white hover:underline">Products</a></li>
+                <li><a href="#" class="text-white hover:underline">About</a></li>
+                <li><a href="#" class="text-white hover:underline">Contact</a></li>
+            </ul>
+            <a href="login.html" class="bg-white text-black py-2 px-4 rounded-lg hover:bg-gray-200 hidden md:block">Login</a>
+            <button class="md:hidden text-white focus:outline-none" id="menuButton">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="md:hidden" id="mobileMenu">
+            <ul class="flex flex-col space-y-2 p-4">
+                <li><a href="#" class="text-white hover:underline">Home</a></li>
+                <li><a href="#" class="text-white hover:underline">Products</a></li>
+                <li><a href="#" class="text-white hover:underline">About</a></li>
+                <li><a href="#" class="text-white hover:underline">Contact</a></li>
+                <li><a href="login.html" class="bg-white text-black py-2 px-4 rounded-lg hover:bg-gray-200">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Banner Section  start -->
+    <section class="banner relative flex items-center justify-center text-center text-white" id="banner">
+        <div>
+            <h1 class="text-4xl font-bold mb-72 ml-40">Discover Our Exclusive Products</h1>
+        </div>
+       
+        <!-- Settings icon -->
+        <div class="settings-icon absolute top-32 right-4" id="settingsButton">
+            <button onclick="toggleThemeModal()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="dark" class="bi bi-gear-fill" viewBox="0 0 16 16">
+                    <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+                </svg>
+            </button>
+        </div>
+    </section>
+    
+    <!-- Theme Modal -->
+    <div id="themeModal" class="fixed top-32 right-0 w-36 h-200 bg-white shadow-lg transform translate-x-full transition-transform duration-300">
+        <div class="p-4">
+            <h2 class="text-sm font-bold mb-4">Choose Theme</h2>
+            <div class="flex flex-col space-y-2">
+                <button class="max-w-full w-32  h-10  text-sm  p-2 bg-green-500 text-white rounded" onclick="setTheme('green')">Green Theme</button>
+                <button class="max-w-full w-32  h-10  text-sm p-2 bg-blue-500 text-white rounded" onclick="setTheme('blue')">Blue Theme</button>
+                <button class="max-w-full w-32  h-10  text-sm p-2 bg-red-500 text-white rounded" onclick="setTheme('red')">Red Theme</button>
+                <button class="max-w-full w-32  h-10  text-sm p-2 bg-yellow-500 text-white rounded" onclick="setTheme('yellow')">Yellow Theme</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer  start -->
+    <footer class="bg-green-500 text-white py-16 mt-10" id="footer">
+        <div class="container mx-auto text-center">
+            <p>&copy; All rights reserved.</p>
+        </div>
+    </footer>
+    <!-- Footer  end -->
+
+    <script>
+        document.getElementById('menuButton').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        function toggleThemeModal() {
+            const modal = document.getElementById('themeModal');
+            modal.classList.toggle('translate-x-full'); // Toggle the modal visibility
+        }
+
+        // Close the modal if clicked outside
+        document.addEventListener('click', function (event) {
+            const modal = document.getElementById('themeModal');
+            const settingsButton = document.getElementById('settingsButton');
+
+            if (!modal.contains(event.target) && !settingsButton.contains(event.target)) {
+                if (!modal.classList.contains('translate-x-full')) {
+                    modal.classList.add('translate-x-full'); // Hide the modal
+                }
+            }
+        });
+
+        // Function to change the theme
+        function setTheme(color) {
+            const navbar = document.getElementById('navbar');
+            const footer = document.getElementById('footer');
+            const banner = document.getElementById('banner');
+           const elements = document.getElementsByTagName('a');
+
+            
+
+            // Clear all current theme classes
+            navbar.classList.remove('bg-green-500', 'bg-blue-500', 'bg-red-500', 'bg-yellow-500');
+            footer.classList.remove('bg-green-500', 'bg-blue-500', 'bg-red-500', 'bg-yellow-500');
+            banner.classList.remove('bg-green-500', 'bg-blue-500', 'bg-red-500', 'bg-yellow-500');
+
+            
+
+            // Apply the selected theme color
+            navbar.classList.add(`bg-${color}-500`);
+            footer.classList.add(`bg-${color}-500`);
+            banner.classList.add(`bg-${color}-500`);
+
+           
+        }
+    </script>
+</body>
+</html>
+``
